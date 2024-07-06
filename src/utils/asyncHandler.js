@@ -1,11 +1,11 @@
 // below is one way to create a wrapper function and below it we have a second approach
 const asyncHandler=(requestHandler)=>{
-    (req,res,next)=>{
+    return (req,res,next)=>{
         Promise.resolve(requestHandler(req,res,next)).catch((err)=>next(err))
     }
 }
 
-export default asyncHandler
+export {asyncHandler}
 
 // const asyncHandler=()=>{}
 // const asyncHandler=(fn)=()=>{}
