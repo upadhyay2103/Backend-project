@@ -26,7 +26,7 @@ const registerUser=asyncHandler( async(req,res)=>{
     }
 
     // step 3 check is user already exists
-    const exUser=User.findOne({
+    const exUser=await User.findOne({
         $or:[{email},{username}]
     })
 
@@ -37,7 +37,12 @@ const registerUser=asyncHandler( async(req,res)=>{
 
     // step 4 check for avatar
     const avatarLocalPath=req?.files?.avatar[0]?.path;
-    const coverImageLocalPath=req?.files?.coverImage[0]?.path;
+    // const coverImageLocalPath=req?.files?.coverImage[0]?.path;
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length>0)
+    {
+        coverImageLocalPath=req.files.coverImage[0].path;
+    }
 
     if(!avatarLocalPath)
     {
@@ -75,7 +80,7 @@ const registerUser=asyncHandler( async(req,res)=>{
     return res.status(201).json(
         new ApiResponse(200,createdUser,"Successfully registered user")
     )
-    
+
 } )
 
 export {registerUser}
